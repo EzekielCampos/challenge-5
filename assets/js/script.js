@@ -1,5 +1,5 @@
 // Retrieve tasks and nextId from localStorage
-// let taskList = JSON.parse(localStorage.getItem("tasks"));
+let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const taskInput = $("#task-title");
@@ -15,7 +15,7 @@ $("#due-date").datepicker({
  
     modal = $( "#dialog-form" ).dialog({
       autoOpen: false,
-      height: 400,
+      height: 700,
       width: 350,
       modal: true,
       buttons: {
@@ -71,27 +71,52 @@ function createTaskCard(task) {
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 
+    let showTasks = readTasksFromStorage();
+
+    for(task of showTasks){
+        $("#todo-cards").append(createTaskCard(task));
+
+    }
+
 
 
 }
 
+function readTasksFromStorage() {
+  
+    // TODO: Retrieve projects from localStorage and parse the JSON to an array. If there are no projects in localStorage, initialize an empty array and return it.
+  const retrievedTasks = JSON.parse(localStorage.getItem("tasks"));
+  
+  let allTasks =[];
+  if(retrievedTasks !== null){
+    allTasks = retrievedTasks;
+    return allTasks;
+  }
+  else{
+  
+    return allTasks;
+  
+  }
+}
+
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
-    // event.preventDefault();
+    event.preventDefault();
 
-    let taskList =[];
-    const object = {
+    let newTaskList= readTasksFromStorage();
+    const newTask = {
 
         name:taskInput.val(),
-        description:descriptionInput.val(),
+        description:descriptionInput.val().trim(),
         date:dateInput.val()
 
     }
-    taskList.push(object);
-    localStorage.setItem("tasks", JSON.stringify(taskList));
+    newTaskList.push(newTask);
+    localStorage.setItem("tasks", JSON.stringify(newTaskList));
     taskInput.val("");
     dateInput.val("");
     descriptionInput.val("");
+    renderTaskList();
 
 
 }
@@ -111,6 +136,8 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
+
+    renderTaskList();
 
     $( ".btn" ).button().on( "click", function() {
         modal.dialog( "open" );
