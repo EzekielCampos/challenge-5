@@ -2,6 +2,10 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+const taskInput = $("#task-title");
+const dateInput = $("#due-date");
+const descriptionInput = $("#task-description");
+
 let modal;
 
 $("#due-date").datepicker({
@@ -17,10 +21,17 @@ $("#due-date").datepicker({
       buttons: {
         "Add Task":function(){modal.dialog("close")},
         Cancel: function() {
+            taskInput.val("");
+            dateInput.val("");
+            descriptionInput.val("");
           modal.dialog( "close" );
         }
       },
       close: function() {
+
+        taskInput.val("");
+        dateInput.val("");
+        descriptionInput.val("");
         modal.dialog( "close" );
 
       }
