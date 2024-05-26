@@ -1,5 +1,5 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
+// let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const taskInput = $("#task-title");
@@ -19,7 +19,7 @@ $("#due-date").datepicker({
       width: 350,
       modal: true,
       buttons: {
-        "Add Task":function(){modal.dialog("close")},
+        "Add Task":handleAddTask,
         Cancel: function() {
             taskInput.val("");
             dateInput.val("");
@@ -77,7 +77,21 @@ function renderTaskList() {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
+    // event.preventDefault();
 
+    let taskList =[];
+    const object = {
+
+        name:taskInput.val(),
+        description:descriptionInput.val(),
+        date:dateInput.val()
+
+    }
+    taskList.push(object);
+    localStorage.setItem("tasks", JSON.stringify(taskList));
+    taskInput.val("");
+    dateInput.val("");
+    descriptionInput.val("");
 
 
 }
