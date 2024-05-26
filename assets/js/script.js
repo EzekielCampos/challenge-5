@@ -116,6 +116,7 @@ function handleAddTask(event){
     taskInput.val("");
     dateInput.val("");
     descriptionInput.val("");
+    modal.dialog("close");
     renderTaskList();
 
 
