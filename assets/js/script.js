@@ -52,12 +52,23 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
     
-    let taskCard = $('<div>').addClass("card project-card draggable my3").attr("data-project-id", task.id);
-    let headerEl = $("<header>").addClass("card-header h4").text(task.name);
+    let taskCard = $('<div>').addClass("card project-card draggable my3 mb-5").attr("data-project-id", task.id);
+    let headerEl = $("<header>").addClass("card-header h4 ").text(task.name);
     let bodyEl = $("<body>").addClass("card-body");
     let pDescriptionEl = $("<p>").addClass("card-text").text(task.description);
     let pDateEl = $("<p>").addClass("card-text").text(task.date);
-    let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("delete").attr("data-project-id", task.id);
+    let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-project-id", task.id);
+
+    if (task.date) {
+      const now = dayjs();
+      const taskDueDate = dayjs(task.date, 'DD/MM/YYYY');
+      if (now.isSame(taskDueDate, 'day')) {
+        headerEl.addClass('bg-warning text-white');
+      } else if (now.isAfter(taskDueDate)) {
+        headerEl.addClass('bg-danger text-white');
+        cardDeleteBtn.addClass('border-light');
+      }
+    }
 
     bodyEl.append(pDescriptionEl, pDateEl, cardDeleteBtn);
 
@@ -139,9 +150,7 @@ function handleDeleteTask(event){
             console.log("sucess");
         }
 
-
      }
-
 
      localStorage.setItem("tasks", JSON.stringify(task));
      renderTaskList();
@@ -171,5 +180,17 @@ $(document).ready(function () {
       });
 
       $("#todo-cards").on("click", ".delete", handleDeleteTask);
+
+      $(".draggable").draggable();
+
+
+      $('.lane').droppable({ 
+        accept: ".draggable",
+        drop:function() {
+            alert( "dropped" );}
+     
+    });
+
+
 
 });

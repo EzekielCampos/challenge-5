@@ -9,10 +9,14 @@ body {
 
 .task-card {
   margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: auto;
 }
+
 
 .task-card:hover {
   cursor: grab;
+
 }
 
 label, input { display:block; }
