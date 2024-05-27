@@ -181,10 +181,11 @@ $(document).ready(function () {
 
       $("#todo-cards").on("click", ".delete", handleDeleteTask);
 
-      $(".draggable").draggable();
+      $(".draggable").draggable({ zIndex: 100,});
 
 
       $('.lane').droppable({ 
+  
         accept: ".draggable",
         drop:function() {
             alert( "dropped" );}
