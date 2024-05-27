@@ -29,6 +29,7 @@
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
 
+    <!-- This form will be rendered as a modal when the add task button is clicked -->
     <div id="dialog-form" title="To Do Task">
       <form>
           <label>Task title</label>
@@ -42,6 +43,7 @@
       </form>
     </div>
 
+    <!-- This is where each task will be rendered and can be dragged to different section -->
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
@@ -49,6 +51,7 @@
             <h2 class="card-title mb-1">To Do</h2>
           </div>
           <div class="card-body bg-light">
+             <!-- Each class will by default be placed in to-do cards when form is submitted -->
             <div id="todo-cards"></div>
           </div>
         </div>

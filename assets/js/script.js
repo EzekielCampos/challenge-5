@@ -134,8 +134,6 @@ function readTasksFromStorage() {
 function handleAddTask(event){
     event.preventDefault();
 
-    descriptionInput.val("");
-
     let newTaskList= readTasksFromStorage();
     const newTask = {
 
@@ -146,44 +144,41 @@ function handleAddTask(event){
         status:"to-do",
 
     }
+    // Push the new task to the main list
     newTaskList.push(newTask);
+    // Update the new task array to local storage
     localStorage.setItem("tasks", JSON.stringify(newTaskList));
+    // Clear input fileds
     taskInput.val("");
     dateInput.val("");
     descriptionInput.val("");
+    // When the submit button is clicked the modal will close
     modal.dialog("close");
+    // Render the tasks
     renderTaskList();
-
-
 }
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
 
-
+  // This will get the specific id of the class so that it can be matched
     const taskId = $(event.target).parent().parent().attr("data-project-id");
 
     let task = readTasksFromStorage();
 
+    // This will loop through the tasks to find the specific task that needs to be removed
     for (let index = 0; index < task.length; index++){
 
         if(task[index].id == taskId){
-            
             task.splice(index, 1);
-            console.log("sucess");
         }
 
      }
 
+    //  Update the task list in local storage
      localStorage.setItem("tasks", JSON.stringify(task));
+         // renderTaskList();
      renderTaskList();
-
-    // renderTaskList();
-console.log("hi");
-console.log(taskId);
-console.log(task);
-
-
 
 }
 
