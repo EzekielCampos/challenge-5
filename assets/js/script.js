@@ -192,20 +192,21 @@ console.log(task);
 function handleDrop(event, ui) {
 
    // ? Read projects from localStorage
-   const tasks = readTasksFromStorage();
+   let tasks = readTasksFromStorage();
 
    // ? Get the project id from the event
-   const taskId = ui.draggable[0].dataset.taskId;
+   const taskId = ui.draggable[0].dataset.projectId;
+   console.log(taskId);
  
    // ? Get the id of the lane that the card was dropped into
    const newStatus = event.target.id;
    console.log(newStatus);
 
-   for(task of tasks){
-    if(task.id === taskId){
+   for(let index = 0; index < tasks.length; index++){
+    if(tasks[index].id == taskId){
 
-      console.log(sucess);
-      task.status = newStatus;
+      console.log("sucess");
+      tasks[index].status = newStatus;
 
     }
    }
