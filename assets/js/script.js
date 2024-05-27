@@ -1,5 +1,4 @@
-// Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
+// Retrieve nextId from localStorage
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const taskInput = $("#task-title");
@@ -71,6 +70,9 @@ function createTaskCard(task) {
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 
+    const todoList = $('#todo-cards');
+    todoList.empty();
+
     let showTasks = readTasksFromStorage();
 
     for(task of showTasks){
@@ -78,13 +80,11 @@ function renderTaskList() {
 
     }
 
-
-
 }
 
 function readTasksFromStorage() {
   
-    // TODO: Retrieve projects from localStorage and parse the JSON to an array. If there are no projects in localStorage, initialize an empty array and return it.
+  //  Retrieve tasks from localStorage and parse the JSON to an array. If there are no projects in localStorage, initialize an empty array and return it.
   const retrievedTasks = JSON.parse(localStorage.getItem("tasks"));
   
   let allTasks =[];
@@ -108,7 +108,8 @@ function handleAddTask(event){
 
         name:taskInput.val(),
         description:descriptionInput.val().trim(),
-        date:dateInput.val()
+        date:dateInput.val(),
+        id:generateTaskId(),
 
     }
     newTaskList.push(newTask);
@@ -126,6 +127,31 @@ function handleAddTask(event){
 function handleDeleteTask(event){
 
 
+    const taskId = $(event.target).parent().parent().attr("data-project-id");
+
+    let task = readTasksFromStorage();
+
+    for (let index = 0; index < task.length; index++){
+
+        if(task[index].id == taskId){
+            
+            task.splice(index, 1);
+            console.log("sucess");
+        }
+
+
+     }
+
+
+     localStorage.setItem("tasks", JSON.stringify(task));
+     renderTaskList();
+
+    // renderTaskList();
+console.log("hi");
+console.log(taskId);
+console.log(task);
+
+
 
 }
 
@@ -140,8 +166,10 @@ $(document).ready(function () {
 
     renderTaskList();
 
-    $( ".btn" ).button().on( "click", function() {
+    $( "#add-button" ).on( "click", function() {
         modal.dialog( "open" );
       });
+
+      $("#todo-cards").on("click", ".delete", handleDeleteTask);
 
 });
