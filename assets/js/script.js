@@ -53,7 +53,7 @@ function generateTaskId() {
 function createTaskCard(task) {
     
     let taskCard = $('<div>').addClass("card project-card draggable my3").attr("data-project-id", task.id);
-    let headerEl = $("<header>").addClass("card-header h4").text(task.title);
+    let headerEl = $("<header>").addClass("card-header h4").text(task.name);
     let bodyEl = $("<body>").addClass("card-body");
     let pDescriptionEl = $("<p>").addClass("card-text").text(task.description);
     let pDateEl = $("<p>").addClass("card-text").text(task.date);
