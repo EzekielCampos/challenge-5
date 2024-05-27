@@ -1,5 +1,4 @@
-// Retrieve nextId from localStorage
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+
 
 const toDoString = "to-do";
 const inProgressString= "in-progress";
@@ -9,17 +8,20 @@ const taskInput = $("#task-title");
 const dateInput = $("#due-date");
 const descriptionInput = $("#task-description");
 
+// This lets the input box choose a date
 $("#due-date").datepicker({
     changeMonth: true,
     changeYear: true,
   });
  
+  // Creates a modal for when the add task button is clicked
     let modal = $( "#dialog-form" ).dialog({
       autoOpen: false,
       height: 700,
       width: 350,
       modal: true,
       buttons: {
+        // Creates buttons inside modal 
         "Add Task":handleAddTask,
         Cancel: function() {
             taskInput.val("");
@@ -39,12 +41,9 @@ $("#due-date").datepicker({
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
 
-    let randomId;
-    for(let index = 0; index < 5; index++){
 
-        randomId = Math.floor(Math.random()*10000);
+    let randomId = Math.floor(Math.random()*10000);
 
-    }
     return randomId;
 
 
@@ -134,6 +133,8 @@ function readTasksFromStorage() {
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
     event.preventDefault();
+
+    descriptionInput.val("");
 
     let newTaskList= readTasksFromStorage();
     const newTask = {
