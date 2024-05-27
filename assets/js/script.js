@@ -1,6 +1,10 @@
 // Retrieve nextId from localStorage
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+const toDoString = "to-do";
+const inProgressString= "in-progress";
+const doneString = "done";
+
 const taskInput = $("#task-title");
 const dateInput = $("#due-date");
 const descriptionInput = $("#task-description");
@@ -57,7 +61,7 @@ function createTaskCard(task) {
     let bodyEl = $("<body>").addClass("card-body");
     let pDescriptionEl = $("<p>").addClass("card-text").text(task.description);
     let pDateEl = $("<p>").addClass("card-text").text(task.date);
-    let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-project-id", task.id);
+    let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-task-id", task.id);
 
     if (task.date) {
       const now = dayjs();
@@ -82,12 +86,31 @@ function createTaskCard(task) {
 function renderTaskList() {
 
     const todoList = $('#todo-cards');
+    const progressList = $('#in-progress-cards');
+    const doneList = $('#done-cards');
+
+   
+
     todoList.empty();
+    progressList.empty();
+    doneList.empty();
 
     let showTasks = readTasksFromStorage();
 
     for(task of showTasks){
-        $("#todo-cards").append(createTaskCard(task));
+
+      if(task.status === toDoString){
+        todoList.append(createTaskCard(task));
+      }
+      else if(task.status === inProgressString){
+        progressList.append(createTaskCard(task));
+
+      }
+      else if(task.status === inProgressString){
+        doneList.append(createTaskCard(task));
+
+      }
+       
 
     }
 
@@ -121,6 +144,7 @@ function handleAddTask(event){
         description:descriptionInput.val().trim(),
         date:dateInput.val(),
         id:generateTaskId(),
+        status:"to-do",
 
     }
     newTaskList.push(newTask);
@@ -167,6 +191,27 @@ console.log(task);
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
 
+   // ? Read projects from localStorage
+   const tasks = readTasksFromStorage();
+
+   // ? Get the project id from the event
+   const taskId = ui.draggable[0].dataset.taskId;
+ 
+   // ? Get the id of the lane that the card was dropped into
+   const newStatus = event.target.id;
+   console.log(newStatus);
+
+   for(task of tasks){
+    if(task.id === taskId){
+
+      console.log(sucess);
+      task.status = newStatus;
+
+    }
+   }
+   localStorage.setItem("tasks", JSON.stringify(tasks));
+   renderTaskList();
+
 
 }
 
@@ -187,8 +232,7 @@ $(document).ready(function () {
       $('.lane').droppable({ 
   
         accept: ".draggable",
-        drop:function() {
-            alert( "dropped" );}
+        drop:handleDrop,
      
     });
 
