@@ -9,14 +9,12 @@ const taskInput = $("#task-title");
 const dateInput = $("#due-date");
 const descriptionInput = $("#task-description");
 
-let modal;
-
 $("#due-date").datepicker({
     changeMonth: true,
     changeYear: true,
   });
  
-    modal = $( "#dialog-form" ).dialog({
+    let modal = $( "#dialog-form" ).dialog({
       autoOpen: false,
       height: 700,
       width: 350,
@@ -106,7 +104,7 @@ function renderTaskList() {
         progressList.append(createTaskCard(task));
 
       }
-      else if(task.status === inProgressString){
+      else if(task.status === doneString){
         doneList.append(createTaskCard(task));
 
       }
@@ -212,6 +210,8 @@ function handleDrop(event, ui) {
    }
    localStorage.setItem("tasks", JSON.stringify(tasks));
    renderTaskList();
+   $(".draggable").draggable({ zIndex: 100,});
+
 
 
 }
@@ -222,16 +222,19 @@ $(document).ready(function () {
     renderTaskList();
 
     $( "#add-button" ).on( "click", function() {
-        modal.dialog( "open" );
-      });
+      modal.dialog( "open" );
+    });
+    
 
-      $("#todo-cards").on("click", ".delete", handleDeleteTask);
+    $("#todo-cards").on("click", ".delete", handleDeleteTask);
+    $("#in-progress-cards").on("click", ".delete", handleDeleteTask);
+    $("#done-cards").on("click", ".delete", handleDeleteTask);
+
+
 
       $(".draggable").draggable({ zIndex: 100,});
 
-
       $('.lane').droppable({ 
-  
         accept: ".draggable",
         drop:handleDrop,
      
