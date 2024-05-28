@@ -19,7 +19,7 @@ body {
 }
 #add-button:hover{
 
-  box-shadow: 3px 3px #000;
+  box-shadow: 10px #000;
 }
 
 label, input { display:block; }

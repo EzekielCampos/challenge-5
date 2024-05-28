@@ -59,7 +59,7 @@ function createTaskCard(task) {
     let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-task-id", task.id);
 
     // These conditional statements will give different header colors based on due dates
-    if (task.date) {
+    if (task.date && task.status !== doneString) {
       const now = dayjs();
       const taskDueDate = dayjs(task.date, 'DD/MM/YYYY');
       if (now.isSame(taskDueDate, 'day')) {
@@ -226,8 +226,6 @@ $(document).ready(function () {
     $("#done-cards").on("click", ".delete", handleDeleteTask);
 
 
-
-      $(".draggable").draggable({ zIndex: 100,});
 
       $('.lane').droppable({ 
         accept: ".draggable",
