@@ -1,5 +1,4 @@
 
-
 const toDoString = "to-do";
 const inProgressString= "in-progress";
 const doneString = "done";
@@ -17,7 +16,7 @@ $("#due-date").datepicker({
   // Creates a modal for when the add task button is clicked
     let modal = $( "#dialog-form" ).dialog({
       autoOpen: false,
-      height: 700,
+      height: 600,
       width: 350,
       modal: true,
       buttons: {
@@ -46,20 +45,20 @@ function generateTaskId() {
 
     return randomId;
 
-
 }
 
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
     
-    let taskCard = $('<div>').addClass("card project-card draggable my3 mb-5").attr("data-project-id", task.id);
+    let taskCard = $('<div>').addClass("card project-card draggable my3 mb-5").attr("data-list-id", task.id);
     let headerEl = $("<header>").addClass("card-header h4 ").text(task.name);
     let bodyEl = $("<body>").addClass("card-body");
     let pDescriptionEl = $("<p>").addClass("card-text").text(task.description);
     let pDateEl = $("<p>").addClass("card-text").text(task.date);
     let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-task-id", task.id);
 
+    // These conditional statements will give different header colors based on due dates
     if (task.date) {
       const now = dayjs();
       const taskDueDate = dayjs(task.date, 'DD/MM/YYYY');
@@ -87,7 +86,7 @@ function renderTaskList() {
     const doneList = $('#done-cards');
 
    
-
+// Empty everything before rendering to page
     todoList.empty();
     progressList.empty();
     doneList.empty();
@@ -96,6 +95,7 @@ function renderTaskList() {
 
     for(task of showTasks){
 
+      //Task will change section depending on what status the list has
       if(task.status === toDoString){
         todoList.append(createTaskCard(task));
       }
@@ -107,9 +107,9 @@ function renderTaskList() {
         doneList.append(createTaskCard(task));
 
       }
-       
-
     }
+    // Makes the card draggable when it is first rendered
+    $(".draggable").draggable({ zIndex: 100,});
 
 }
 
@@ -119,7 +119,7 @@ function readTasksFromStorage() {
   const retrievedTasks = JSON.parse(localStorage.getItem("tasks"));
   
   let allTasks =[];
-  if(retrievedTasks !== null){
+  if(retrievedTasks){
     allTasks = retrievedTasks;
     return allTasks;
   }
@@ -135,6 +135,7 @@ function handleAddTask(event){
     event.preventDefault();
 
     let newTaskList= readTasksFromStorage();
+    // Object that will hold all the input data
     const newTask = {
 
         name:taskInput.val(),
@@ -162,7 +163,7 @@ function handleAddTask(event){
 function handleDeleteTask(event){
 
   // This will get the specific id of the class so that it can be matched
-    const taskId = $(event.target).parent().parent().attr("data-project-id");
+    const taskId = $(event.target).parent().parent().attr("data-list-id");
 
     let task = readTasksFromStorage();
 
@@ -189,7 +190,7 @@ function handleDrop(event, ui) {
    let tasks = readTasksFromStorage();
 
    // ? Get the project id from the event
-   const taskId = ui.draggable[0].dataset.projectId;
+   const taskId = ui.draggable[0].dataset.listId;
    console.log(taskId);
  
    // ? Get the id of the lane that the card was dropped into
@@ -199,7 +200,7 @@ function handleDrop(event, ui) {
    for(let index = 0; index < tasks.length; index++){
     if(tasks[index].id == taskId){
 
-      console.log("sucess");
+      // This loop goes through the task, finds the one that was dropped and updates it's status
       tasks[index].status = newStatus;
 
     }
@@ -207,8 +208,6 @@ function handleDrop(event, ui) {
    localStorage.setItem("tasks", JSON.stringify(tasks));
    renderTaskList();
    $(".draggable").draggable({ zIndex: 100,});
-
-
 
 }
 
