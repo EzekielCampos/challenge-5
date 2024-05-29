@@ -1,4 +1,4 @@
-
+// Strings will be used to check the status of the tasks
 const toDoString = "to-do";
 const inProgressString= "in-progress";
 const doneString = "done";
