@@ -20,7 +20,7 @@ $("#due-date").datepicker({
       width: 350,
       modal: true,
       buttons: {
-        // Creates buttons inside modal 
+        // When the add task button is clicked it will add the new task to the page
         "Add Task":handleAddTask,
         Cancel: function() {
             taskInput.val("");
@@ -50,15 +50,16 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-    
+    // This creates the card that will contain the task
     let taskCard = $('<div>').addClass("card project-card draggable my3 mb-5").attr("data-list-id", task.id);
     let headerEl = $("<header>").addClass("card-header h4 ").text(task.name);
     let bodyEl = $("<body>").addClass("card-body");
     let pDescriptionEl = $("<p>").addClass("card-text").text(task.description);
     let pDateEl = $("<p>").addClass("card-text").text(task.date);
+    // Delete button gives user option to remove the task once it is completed
     let cardDeleteBtn = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-task-id", task.id);
 
-    // These conditional statements will give different header colors based on due dates
+    // These conditional statements will give different header colors based on due dates and task status
     if (task.date && task.status !== doneString) {
       const now = dayjs();
       const taskDueDate = dayjs(task.date, 'DD/MM/YYYY');
@@ -71,7 +72,6 @@ function createTaskCard(task) {
     }
 
     bodyEl.append(pDescriptionEl, pDateEl, cardDeleteBtn);
-
     taskCard.append(headerEl, bodyEl);
     return taskCard;
 
@@ -86,16 +86,17 @@ function renderTaskList() {
     const doneList = $('#done-cards');
 
    
-// Empty everything before rendering to page
+// Empties everything before rendering to page
     todoList.empty();
     progressList.empty();
     doneList.empty();
 
+    // Get the task from local storage
     let showTasks = readTasksFromStorage();
 
     for(task of showTasks){
 
-      //Task will change section depending on what status the list has
+      //Task will change section depending on what status the task has
       if(task.status === toDoString){
         todoList.append(createTaskCard(task));
       }
@@ -135,6 +136,14 @@ function handleAddTask(event){
     event.preventDefault();
 
     let newTaskList= readTasksFromStorage();
+
+    if (!taskInput.val() || !dateInput.val() || !descriptionInput.val()){
+      alert("Invalid Input. Try again");
+      taskInput.val("");
+      dateInput.val("");
+      descriptionInput.val("");
+      return;
+    }
     // Object that will hold all the input data
     const newTask = {
 
@@ -162,7 +171,7 @@ function handleAddTask(event){
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
 
-  // This will get the specific id of the class so that it can be matched
+  // From the delete button this variable will get the specific id of the card so that it can be matched
     const taskId = $(event.target).parent().parent().attr("data-list-id");
 
     let task = readTasksFromStorage();
@@ -189,11 +198,12 @@ function handleDrop(event, ui) {
    // ? Read projects from localStorage
    let tasks = readTasksFromStorage();
 
-   // ? Get the project id from the event
+      // ? Get the project id from the event
    const taskId = ui.draggable[0].dataset.listId;
    console.log(taskId);
  
-   // ? Get the id of the lane that the card was dropped into
+  // ? Get the id of the lane that the card was dropped into
+
    const newStatus = event.target.id;
    console.log(newStatus);
 
@@ -226,13 +236,9 @@ $(document).ready(function () {
     $("#done-cards").on("click", ".delete", handleDeleteTask);
 
 
-
       $('.lane').droppable({ 
         accept: ".draggable",
         drop:handleDrop,
      
     });
-
-
-
 });
