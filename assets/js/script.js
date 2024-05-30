@@ -2,7 +2,7 @@
 const toDoString = "to-do";
 const inProgressString= "in-progress";
 const doneString = "done";
-
+// Input fields in the modal
 const taskInput = $("#task-title");
 const dateInput = $("#due-date");
 const descriptionInput = $("#task-description");
@@ -217,8 +217,6 @@ function handleDrop(event, ui) {
    }
    localStorage.setItem("tasks", JSON.stringify(tasks));
    renderTaskList();
-   $(".draggable").draggable({ zIndex: 100,});
-
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -231,11 +229,7 @@ $(document).ready(function () {
     });
     
 
-    $("#todo-cards").on("click", ".delete", handleDeleteTask);
-    $("#in-progress-cards").on("click", ".delete", handleDeleteTask);
-    $("#done-cards").on("click", ".delete", handleDeleteTask);
-
-
+    $(document).on("click", ".delete", handleDeleteTask);
       $('.lane').droppable({ 
         accept: ".draggable",
         drop:handleDrop,
